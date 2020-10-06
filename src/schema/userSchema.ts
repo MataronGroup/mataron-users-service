@@ -21,7 +21,7 @@ const userSchema = {
             type: 'string',
             required: true
         },
-        Phone_Number: {
+        PhoneNumber: {
             type: 'string',
             required: true
         },
@@ -29,7 +29,7 @@ const userSchema = {
             type: 'string',
             required: true
         },
-        Type_Of_Service:{
+        TypeOfService:{
             type: 'string',
             required: true
         },
@@ -37,7 +37,7 @@ const userSchema = {
             type: 'string',
             required: true
         },
-        C_In_Charge: {
+        CommanderInCharge: {
             type: 'string',
             required: true
         },
