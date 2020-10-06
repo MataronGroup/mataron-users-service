@@ -4,11 +4,11 @@ import Users from './models/db/UserDBModel'
 import Professions from './models/db/Profession'
 import { UserController } from "./UserController";
 import { UserDBHandler } from "./db/userDBHandler/userDBHandler";
+import {config} from './conf/config'
 
-
-const seq = new Sequelize('mataron', 'mataron', 'thelittlecitizen', {
-    host: '10.1.0.117',
-    dialect: 'mssql',
+const seq = new Sequelize(config.db.database, config.db.username, config.db.password, {
+    host: config.db.host,
+    dialect: "mssql",
     models: [Users,Professions]
   });
 
@@ -25,7 +25,7 @@ const app = new App(
     [
         new UserController(userHandler)
     ],
-    9000,
+    config.server.port,
 );
 
 app.listen();
