@@ -24,7 +24,6 @@ export class UserController implements Router{
         this.router.get(`${this.path}s`, this.getAllUser.bind(this));
         this.router.get(this.path, this.getAllUserByTask.bind(this));
 
-
         this.router.delete(`${this.path}/:id`, this.deletetUser.bind(this));
         this.router.put(`${this.path}/:id`,validate({body: this.schemas}), this.updateUser.bind(this));
 
