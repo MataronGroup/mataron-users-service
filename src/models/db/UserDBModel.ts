@@ -1,6 +1,6 @@
 import {Table, Column, Model, PrimaryKey, AllowNull, HasMany, HasOne, ForeignKey, BelongsTo} from 'sequelize-typescript';
 import Professions from './Profession';
- 
+
 @Table({tableName:"Users",timestamps: false})
 export default class Users extends Model<Users> {
 
@@ -22,7 +22,7 @@ export default class Users extends Model<Users> {
   @ForeignKey(() => Professions)
   @Column
   Profession: number;
- 
+
   @Column
   CarID: number;
 
@@ -46,8 +46,8 @@ export default class Users extends Model<Users> {
 
   @Column
   Gender: string;
-  
+
   @BelongsTo(() => Professions)
   Professions : Professions
-  
+
 }

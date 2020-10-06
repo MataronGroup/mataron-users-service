@@ -1,38 +1,74 @@
 import express, { response } from "express";
 import { IUSerDBHandler } from "./db/userDBHandler/IUserDBHandler";
 import {Router} from "./Controllers/Router";
+import { isNullOrUndefined } from "util";
+
+import userSchema from './schema/userSchema'
+import {validate} from "express-jsonschema";
+
 
 export class UserController implements Router{
     
     public path = '/user';
     public router = express.Router();
+    public schemas : object;
 
     constructor(public userDBHandler : IUSerDBHandler) {
+        this.schemas = (userSchema)
         this.initializeRoutes();
     }
 
     public initializeRoutes() {
-        this.router.post(this.path, this.insertUser.bind(this));
 
         this.router.get(this.path + "/:id", this.getUser.bind(this));
         this.router.get(`${this.path}s`, this.getAllUser.bind(this));
         this.router.get(this.path, this.getAllUserByTask.bind(this));
 
+
+        
         this.router.delete(`${this.path}/:id`, this.deletetUser.bind(this));
+        // this.router.put(`${this.path}/:id`,validate({body: this.schemas}), this.updateUser.bind(this));
         this.router.put(`${this.path}/:id`, this.updateUser.bind(this));
-        this.router.post(`${this.path}`, this.insertUser.bind(this));
+      
+         
+        
+        this.router.post(`${this.path}`, validate({body: this.schemas}),this.insertUser.bind(this));
 
     }
 
+
     public async insertUser(req: express.Request, res: express.Response){
         
+        try{
+            let body = req.body;    
+            let id = body.PersonalID;
+            let user = await this.userDBHandler.getUser(id)
+            if (!isNullOrUndefined(user)){
+                res.status(409).send({"error" : `The user with id already exit in db ${id}`});
+            }
+            else{
+                await this.userDBHandler.insertUser(body)
+                res.status(200).send(await this.userDBHandler.getUser(id));
+            }
+        }
+        catch(err)
+        {
+            res.status(500).send(err);
+        }
     }
 
 
     public async deletetUser(req: express.Request, res: express.Response){
         try{
             let id = parseInt(req.params.id)
-            let user = await this.userDBHandler.deletetUser(id);
+            if (isNaN(id)){
+                res.status(406).send({"error":`User id must be number`});
+            }
+            let user = await this.userDBHandler.getUser(id);
+            let deletedCount = await this.userDBHandler.deletetUser(id);
+            if (deletedCount == 0){
+                res.status(404).send({"error": "not found id " + id}) 
+            }
             res.status(200).send(user);
         }
         catch(err){
@@ -42,7 +78,24 @@ export class UserController implements Router{
 
 
     public async updateUser(req: express.Request, res: express.Response){
-        
+        try{
+            let body = req.body;    
+            let id = body.params.id;
+            console.log(id)
+            let user = await this.userDBHandler.getUser(id)
+            if (isNullOrUndefined(user)){
+                res.status(404).send({"error" : `The user with id not exit in db ${id}`});
+            }
+            else{
+                await this.userDBHandler.updateUser(id,body)
+                
+                res.status(200).send(await this.userDBHandler.getUser(id));
+            }
+        }
+        catch(err)
+        {
+            res.status(500).send(err);
+        }
     }
 
     
@@ -50,7 +103,13 @@ export class UserController implements Router{
         try{
             console.log("here")
             let id = parseInt(req.params.id)
+            if (isNaN(id)){
+                res.status(406).send({"error":`User id must be number`});
+            }
             let user = await this.userDBHandler.getUser(id);
+            if (isNullOrUndefined(user)){
+                res.status(404).send({"error":`User not found with id ${id}`});
+            }
             res.status(200).send(user);
         }
         catch(err){
