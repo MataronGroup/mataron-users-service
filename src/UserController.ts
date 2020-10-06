@@ -78,10 +78,12 @@ export class UserController implements Router{
 
 
     public async updateUser(req: express.Request, res: express.Response){
+
         try{
-            let body = req.body;    
-            let id = body.params.id;
-            console.log(id)
+
+            let body = req.body;
+
+            let id = parseInt(req.params.id);
             let user = await this.userDBHandler.getUser(id)
             if (isNullOrUndefined(user)){
                 res.status(404).send({"error" : `The user with id not exit in db ${id}`});
@@ -90,11 +92,12 @@ export class UserController implements Router{
                 await this.userDBHandler.updateUser(id,body)
                 
                 res.status(200).send(await this.userDBHandler.getUser(id));
+
             }
         }
         catch(err)
         {
-            res.status(500).send(err);
+            res.status(500).send({"error":err.message});
         }
     }
 

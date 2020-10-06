@@ -25,7 +25,7 @@ const app = new App(
     [
         new UserController(userHandler)
     ],
-    6000,
+    8000,
 );
 
 app.listen();

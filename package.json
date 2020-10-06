@@ -2,7 +2,7 @@
   "name": "mataron-user-service",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/src/Server.ts",
+  "main": "src/Server.ts",
   "type": "commonjs",
   "dependencies": {
     "@types/bluebird": "^3.5.32",
@@ -28,7 +28,6 @@
     "@types/node": "^14.11.2"
   },
   "scripts": {
-    
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node dist/src/Server.js",
