@@ -56,9 +56,7 @@ export class UserController implements Router{
     public async deletetUser(req: express.Request, res: express.Response){
         try{
             let id = req.params.id
-            if (isNaN(parseInt(id))){
-                res.status(406).send({"error":`User id must be number`});
-            }
+
             let user = await this.userDBHandler.getUser(id as string);
             let deletedCount = await this.userDBHandler.deletetUser(id as string);
             if (deletedCount == 0){
@@ -79,9 +77,7 @@ export class UserController implements Router{
             let body = req.body;
 
             let id = req.params.id;
-            if (isNaN(parseInt(id))){
-                res.status(406).send({"error":`User id must be number`});
-            }
+
 
 
             let user = await this.userDBHandler.updateUser(id as string,body)
@@ -103,9 +99,7 @@ export class UserController implements Router{
         try{
             console.log("here")
             let id = req.params.id
-            if (isNaN(parseInt(id))){
-                res.status(406).send({"error":`User id must be number`});
-            }
+           
             let user = await this.userDBHandler.getUser(id as string);
             if (isNullOrUndefined(user)){
                 res.status(404).send({"error":`User not found with id ${id}`});
