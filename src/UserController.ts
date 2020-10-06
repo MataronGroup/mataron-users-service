@@ -99,7 +99,7 @@ export class UserController implements Router{
         try{
             console.log("here")
             let id = req.params.id
-           
+
             let user = await this.userDBHandler.getUser(id as string);
             if (isNullOrUndefined(user)){
                 res.status(404).send({"error":`User not found with id ${id}`});

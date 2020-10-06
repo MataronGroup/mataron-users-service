@@ -40,7 +40,7 @@ export default class Users extends Model<Users> {
   CarID: string;
 
   @Column
-  Phone_Number: string;
+  PhoneNumber: string;
 
 
   @Column
@@ -48,13 +48,13 @@ export default class Users extends Model<Users> {
 
 
   @Column
-  Type_Of_Service: string;
+  TypeOfService: string;
 
   @Column
   Rank: string;
 
   @Column
-  C_In_Charge: string;
+  CommanderInCharge: string;
 
 
   @Column
