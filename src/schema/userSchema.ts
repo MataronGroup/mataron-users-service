@@ -2,7 +2,7 @@ const userSchema = {
     type: 'object',
     properties: {
         UserId: {
-            type: 'number',
+            type: 'string',
             required: true
         },
         Name: {
@@ -17,12 +17,12 @@ const userSchema = {
             type: 'number',
             required: true
         },
-        CardID: {
-            type: 'number',
+        CarID: {
+            type: 'string',
             required: true
         },
         Phone_Number: {
-            type: 'number',
+            type: 'string',
             required: true
         },
         Address: {
@@ -46,7 +46,7 @@ const userSchema = {
             required: true
         },
         PersonalID: {
-            type: 'number',
+            type: 'string',
             required: true
         }
     }

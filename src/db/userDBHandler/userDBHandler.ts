@@ -15,15 +15,28 @@ export class UserDBHandler implements IUSerDBHandler{
         const response  = await this.connection.models.Users.create(data)
         console.log(response)
     }
-    public async deletetUser(id: number): Promise<number> {
+    public async deletetUser(id: string): Promise<number> {
         const response  = await this.connection.models.Users.destroy({where : {PersonalID : id}})
         return response
     }
-    public async updateUser(id: number, data: object): Promise<void> {
-        const response = await this.connection.models.Users.update(data , {where : {PersonalID : id}})
-        console.log(response)
+    public async updateUser(id: string, data: object): Promise<any> {
+        let response = await this.connection.models.Users.findOne({where : {PersonalID : id}}).
+        then(async r => {
+            if (r) {
+                await r.update(data , {where : {PersonalID : id}})
+                console.log(r)
+                return r;
+            }
+
+            return null
+        }).catch(err => {
+            throw err
+        });
+        // console.log(response)
+        return response;
     }
-    public async getUser(id: number): Promise<Users> {
+    public async getUser(id: string): Promise<Users> {
+
         const response  = await this.connection.models.Users.findOne({where : {PersonalID : id},raw: true});
         return response as Users;
     }
@@ -33,13 +46,21 @@ export class UserDBHandler implements IUSerDBHandler{
     }
     public async getAllUserByTask(task : any): Promise<Users[]> {
         const options = {
-            raw : true,
+            nest : true,
             include:[{
-                model:Users
+                model:Users,
+                required: true
             }],
             where : {Type : task}
         }
-        const response  = await this.connection.models.Profession.findAll(options);
-        return response as Users[];
+
+        let response = await this.connection.models.Profession.findAll(options)
+        let r = JSON.parse(JSON.stringify(response))
+        if (isNullOrUndefined(r[0])){
+            return []
+        }
+        console.log(r[0])
+
+        return (r[0]["Users"])
     }
 }

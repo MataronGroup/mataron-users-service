@@ -4,11 +4,11 @@ import {User} from '../../models/User'
 export interface IUSerDBHandler{
     insertUser(data : object) : Promise<void>;
 
-    deletetUser(id : number) : Promise<number>;
+    deletetUser(id : string) : Promise<number>;
 
-    updateUser(id : number , data : object) : Promise<void>;
+    updateUser(id : string , data : object) : Promise<any>;
 
-    getUser(id : number) : Promise<Users>;
+    getUser(id : string) : Promise<Users>;
 
     getAllUser() : Promise<Users[]>;
 

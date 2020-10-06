@@ -25,13 +25,9 @@ export class UserController implements Router{
         this.router.get(this.path, this.getAllUserByTask.bind(this));
 
 
-        
         this.router.delete(`${this.path}/:id`, this.deletetUser.bind(this));
-        // this.router.put(`${this.path}/:id`,validate({body: this.schemas}), this.updateUser.bind(this));
-        this.router.put(`${this.path}/:id`, this.updateUser.bind(this));
-      
-         
-        
+        this.router.put(`${this.path}/:id`,validate({body: this.schemas}), this.updateUser.bind(this));
+
         this.router.post(`${this.path}`, validate({body: this.schemas}),this.insertUser.bind(this));
 
     }
@@ -60,12 +56,12 @@ export class UserController implements Router{
 
     public async deletetUser(req: express.Request, res: express.Response){
         try{
-            let id = parseInt(req.params.id)
-            if (isNaN(id)){
+            let id = req.params.id
+            if (isNaN(parseInt(id))){
                 res.status(406).send({"error":`User id must be number`});
             }
-            let user = await this.userDBHandler.getUser(id);
-            let deletedCount = await this.userDBHandler.deletetUser(id);
+            let user = await this.userDBHandler.getUser(id as string);
+            let deletedCount = await this.userDBHandler.deletetUser(id as string);
             if (deletedCount == 0){
                 res.status(404).send({"error": "not found id " + id}) 
             }
@@ -83,16 +79,18 @@ export class UserController implements Router{
 
             let body = req.body;
 
-            let id = parseInt(req.params.id);
-            let user = await this.userDBHandler.getUser(id)
+            let id = req.params.id;
+            if (isNaN(parseInt(id))){
+                res.status(406).send({"error":`User id must be number`});
+            }
+
+
+            let user = await this.userDBHandler.updateUser(id as string,body)
             if (isNullOrUndefined(user)){
                 res.status(404).send({"error" : `The user with id not exit in db ${id}`});
             }
             else{
-                await this.userDBHandler.updateUser(id,body)
-                
-                res.status(200).send(await this.userDBHandler.getUser(id));
-
+                res.status(200).send({status : "success"});
             }
         }
         catch(err)
@@ -105,11 +103,11 @@ export class UserController implements Router{
     public async getUser(req: express.Request, res: express.Response){
         try{
             console.log("here")
-            let id = parseInt(req.params.id)
-            if (isNaN(id)){
+            let id = req.params.id
+            if (isNaN(parseInt(id))){
                 res.status(406).send({"error":`User id must be number`});
             }
-            let user = await this.userDBHandler.getUser(id);
+            let user = await this.userDBHandler.getUser(id as string);
             if (isNullOrUndefined(user)){
                 res.status(404).send({"error":`User not found with id ${id}`});
             }

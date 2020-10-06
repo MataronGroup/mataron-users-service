@@ -1,17 +1,30 @@
-import {Table, Column, Model, PrimaryKey, AllowNull, HasMany, HasOne, ForeignKey, BelongsTo} from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  PrimaryKey,
+  AllowNull,
+  HasMany,
+  HasOne,
+  ForeignKey,
+  BelongsTo,
+  Unique, AutoIncrement
+} from 'sequelize-typescript';
 import Professions from './Profession';
 
 @Table({tableName:"Users",timestamps: false})
 export default class Users extends Model<Users> {
 
-
+  @AutoIncrement
   @PrimaryKey
   @Column
-  PersonalID: number;
-
+  ID: number;
 
   @Column
-  UserId: number;
+  PersonalID: string;
+
+  @Column
+  UserId: string;
 
   @Column
   Name: string;
@@ -24,10 +37,10 @@ export default class Users extends Model<Users> {
   Profession: number;
 
   @Column
-  CarID: number;
+  CarID: string;
 
   @Column
-  Phone_Number: number;
+  Phone_Number: string;
 
 
   @Column
