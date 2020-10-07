@@ -19,7 +19,7 @@ const userSchema = {
         },
         CarID: {
             type: 'string',
-            required: true
+            required: false
         },
         PhoneNumber: {
             type: 'string',

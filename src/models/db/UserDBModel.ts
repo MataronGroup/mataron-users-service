@@ -18,9 +18,6 @@ export default class Users extends Model<Users> {
   @AutoIncrement
   @PrimaryKey
   @Column
-  ID: number;
-
-  @Column
   PersonalID: string;
 
   @Column
