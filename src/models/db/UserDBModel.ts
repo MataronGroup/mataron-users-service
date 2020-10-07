@@ -3,19 +3,14 @@ import {
   Column,
   Model,
   PrimaryKey,
-  AllowNull,
-  HasMany,
-  HasOne,
   ForeignKey,
   BelongsTo,
-  Unique, AutoIncrement
 } from 'sequelize-typescript';
 import Professions from './Profession';
 
 @Table({tableName:"Users",timestamps: false})
 export default class Users extends Model<Users> {
 
-  @AutoIncrement
   @PrimaryKey
   @Column
   PersonalID: string;
