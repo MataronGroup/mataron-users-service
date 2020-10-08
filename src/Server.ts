@@ -12,13 +12,7 @@ const seq = new Sequelize(config.db.database, config.db.username, config.db.pass
     models: [Users,Professions]
   });
 
-
-
-
-
-
 const userHandler = new UserDBHandler(seq);
-
 
 
 const app = new App(

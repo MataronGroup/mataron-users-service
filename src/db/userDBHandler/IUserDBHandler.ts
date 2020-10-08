@@ -1,5 +1,4 @@
 import Users from '../../models/db/UserDBModel';
-import {User} from '../../models/User'
 
 export interface IUSerDBHandler{
     insertUser(data : object) : Promise<void>;
