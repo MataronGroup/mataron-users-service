@@ -55,4 +55,11 @@ export class UserDBHandler implements IUSerDBHandler{
         }
         return (r[0].Users)
     }
+
+    public async postArrayOfUsers(users: Object[]): Promise<void>{
+        for(let i=0; i<users.length;i++)
+        {
+            const response  = await this.connection.models.Users.create(users[i]);
+        }
+    }
 }

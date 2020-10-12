@@ -12,9 +12,11 @@ export class UserController implements Router{
     public path = '/user';
     public router = express.Router();
     public schemas : object;
+    public usersArraySchema : object[];
 
     constructor(public userDBHandler : IUSerDBHandler) {
         this.schemas = (userSchema)
+      //  this.usersArraySchema = ()
         this.initializeRoutes();
     }
 
@@ -28,7 +30,7 @@ export class UserController implements Router{
         this.router.put(`${this.path}/:id`,validate({body: this.schemas}), this.updateUser.bind(this));
 
         this.router.post(`${this.path}`, validate({body: this.schemas}),this.insertUser.bind(this));
-
+        this.router.post(`${this.path}/:createUsers`, this.postArrayOfUsers.bind(this));
     }
 
 
@@ -133,6 +135,25 @@ export class UserController implements Router{
 
         }
         catch(err){
+            res.status(500).send(err);
+        }
+    }
+
+    public async postArrayOfUsers(req: express.Request, res: express.Response){
+        try{
+            const body = req.body;
+            const id = body.PersonalID;
+            const user = await this.userDBHandler.getUser(id)
+            if (!isNullOrUndefined(user)){
+                res.status(409).send({"error" : `The user with id already exit in db ${id}`});
+            }
+            else{
+                await this.userDBHandler.postArrayOfUsers(body)
+                res.status(200).send(await this.userDBHandler.getUser(id));
+            }
+        }
+        catch(err)
+        {
             res.status(500).send(err);
         }
     }
