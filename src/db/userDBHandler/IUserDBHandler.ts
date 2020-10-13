@@ -12,6 +12,4 @@ export interface IUSerDBHandler{
     getAllUser() : Promise<Users[]>;
 
     getAllUserByTask(task : any) : Promise<Users[]>;
-
-    postArrayOfUsers(users: object[]): Promise<void>;
 }
