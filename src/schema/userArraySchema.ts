@@ -50,6 +50,14 @@ const userArraySchema = {
             PersonalID: {
                 type: 'string',
                 required: false
+            },
+            SleepingRoom: {
+                type: 'string',
+                required: false
+            },
+            BuildingRoom: {
+                type: 'string',
+                required: false
             }
         }
     }

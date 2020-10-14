@@ -12,4 +12,6 @@ export interface IUSerDBHandler{
     getAllUser() : Promise<Users[]>;
 
     getAllUserByTask(task : any) : Promise<Users[]>;
+
+    makeQuery(query : string) : Promise<any>;
 }

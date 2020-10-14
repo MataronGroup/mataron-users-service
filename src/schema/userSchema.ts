@@ -48,6 +48,14 @@ const userSchema = {
         PersonalID: {
             type: 'string',
             required: true
+        },
+        SleepingRoom: {
+            type: 'string',
+            required: false
+        },
+        BuildingRoom: {
+            type: 'string',
+            required: false
         }
     }
 }

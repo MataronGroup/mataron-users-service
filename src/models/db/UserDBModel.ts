@@ -52,7 +52,16 @@ export default class Users extends Model<Users> {
   @Column
   Gender: string;
 
+  @Column
+  SleepingRoom: string;
+
+
+  @Column
+  BuildingRoom: string;
+
   @BelongsTo(() => Professions)
   Professions : Professions
+
+
 
 }

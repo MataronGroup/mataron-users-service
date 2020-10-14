@@ -6,7 +6,7 @@ import { isNullOrUndefined } from "util";
 import userSchema from './schema/userSchema'
 import userArraySchema from './schema/userArraySchema'
 import { validate } from "express-jsonschema";
-import { nextTick } from "process";
+
 
 
 export class UserController implements Router {
@@ -97,7 +97,7 @@ export class UserController implements Router {
     public async getUser(req: express.Request, res: express.Response) {
         try {
             const id = req.params.id
-
+            
             const user = await this.userDBHandler.getUser(id as string);
             if (isNullOrUndefined(user)) {
                 res.status(404).send({ "error": `User not found with id ${id}` });
@@ -111,9 +111,16 @@ export class UserController implements Router {
 
     public async getAllUser(req: express.Request, res: express.Response) {
         try {
-            const users = await this.userDBHandler.getAllUser();
+            let users = await this.userDBHandler.getAllUser();
+            for (let i = 0 ; i < users.length ; i++){
+                let profession =await this.userDBHandler.makeQuery(`select * from Profession where ID = ${parseInt(users[i].Profession as any)}`)
+                let job  =await this.userDBHandler.makeQuery(`select * from Jobs where ID = ${parseInt(users[i].Job as any)}`)
+                users[i].Job = job[0].Type
+                users[i].Profession = profession[0].Type
+            }
+            
             const response = {
-                users
+                 users
             }
             res.status(200).send(response);
         }
@@ -140,6 +147,42 @@ export class UserController implements Router {
         }
     }
 
+    private async giveProfessionAndJobToUser(user: any){
+        let profession;
+        let job;
+        try{
+            profession = await this.userDBHandler.makeQuery(`select * from Profession where Type = '${user.Profession as any}'`)
+            if (profession.length === 0){
+                console.log("1")
+               console.log( await this.userDBHandler.makeQuery(`INSERT INTO Profession (Type) VALUES('${user.Profession}')`))
+                profession = await this.userDBHandler.makeQuery(`select * from Profession where Type = '${user.Profession as any}'`) as any
+                console.log("profession: " + profession[0])
+            }
+        }
+        catch(error)
+        {
+
+        }
+        
+        try{
+            job = await this.userDBHandler.makeQuery(`select * from Jobs where Type = '${user.Job as any}'`)
+            console.log("---------------- " + job.length)
+
+            if (job.length == 0){
+               await this.userDBHandler.makeQuery(`INSERT INTO Jobs (Type) VALUES('${user.Job as any}')`)
+                job = await this.userDBHandler.makeQuery(`select * from Jobs where Type = '${user.Job as any}'`)    
+            }
+        }
+
+        catch{
+         
+        }
+        
+        user.Job = job[0].ID
+        user.Profession = profession[0].ID
+        return user;
+    }
+
     public async postArrayOfUsers(req: express.Request, res: express.Response) {
         let errors = [];
         let success = [];
@@ -153,12 +196,13 @@ export class UserController implements Router {
                     errors.push({"name":user.Name,"status":"failed","message":"already exist"});
                 }
                 else {
+                    body[i] = await this.giveProfessionAndJobToUser(body[i]);
                     await this.userDBHandler.insertUser(body[i])
-                    success.push({"name":body[i].Name,"status":"success"});
+                    success.push({"status":"success"});
                 }
             }
             catch (err) {
-                errors.push({"name":user.Name,"status":"failed","message":"server error"});
+                errors.push({"status":"failed","message":"server error"});
             }
         }
         let response =  {

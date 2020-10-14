@@ -55,4 +55,9 @@ export class UserDBHandler implements IUSerDBHandler{
         }
         return (r[0].Users)
     }
+
+    public async makeQuery(query : string) : Promise<any>{
+        return await this.connection.query(query,{nest : true});
+
+    }
 }
