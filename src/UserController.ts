@@ -6,6 +6,7 @@ import { isNullOrUndefined } from "util";
 import userSchema from './schema/userSchema'
 import userArraySchema from './schema/userArraySchema'
 import { validate } from "express-jsonschema";
+import {consoleTestResultHandler} from "tslint/lib/test";
 
 
 
@@ -113,10 +114,21 @@ export class UserController implements Router {
         try {
             let users = await this.userDBHandler.getAllUser();
             for (let i = 0 ; i < users.length ; i++){
+                console.log(users[i])
                 let profession =await this.userDBHandler.makeQuery(`select * from Profession where ID = ${parseInt(users[i].Profession as any)}`)
                 let job  =await this.userDBHandler.makeQuery(`select * from Jobs where ID = ${parseInt(users[i].Job as any)}`)
-                users[i].Job = job[0].Type
-                users[i].Profession = profession[0].Type
+                console.log(`profession : ${users[i].Name} ` + JSON.stringify(profession))
+                console.log(`job : ${users[i].Name} ` + JSON.stringify(job))
+                let jobName = "אין"
+                let professionName = "אין"
+                if (job.length > 0){
+                    jobName = job[0].Type
+                }
+                if (profession.length > 0){
+                    professionName = profession[0].Type
+                }
+                users[i].Job = jobName as any
+                users[i].Profession = professionName as any
             }
             
             const response = {
@@ -125,6 +137,7 @@ export class UserController implements Router {
             res.status(200).send(response);
         }
         catch (err) {
+            console.log(err)
             res.status(500).send(err);
         }
     }
