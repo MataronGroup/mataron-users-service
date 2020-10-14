@@ -55,7 +55,7 @@ const userArraySchema = {
                 type: 'string',
                 required: false
             },
-            BuildingRoom: {
+            SleepingBuilding: {
                 type: 'string',
                 required: false
             }

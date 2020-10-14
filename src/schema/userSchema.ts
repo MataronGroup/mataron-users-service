@@ -53,7 +53,7 @@ const userSchema = {
             type: 'string',
             required: false
         },
-        BuildingRoom: {
+        SleepingBuilding: {
             type: 'string',
             required: false
         }

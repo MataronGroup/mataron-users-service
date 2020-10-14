@@ -57,7 +57,7 @@ export default class Users extends Model<Users> {
 
 
   @Column
-  BuildingRoom: string;
+  SleepingBuilding: string;
 
   @BelongsTo(() => Professions)
   Professions : Professions

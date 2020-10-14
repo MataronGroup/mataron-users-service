@@ -6,4 +6,4 @@ export const config ={
     host: "10.1.0.117"
   },
   server : {port:9000}
-}
+} 
